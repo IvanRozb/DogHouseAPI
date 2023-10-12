@@ -14,10 +14,10 @@ public class DogsController : ControllerBase
     
     [HttpGet]
     public async Task<IActionResult> GetDogsAsync(
-        [FromQuery] string attribute,
-        [FromQuery] string order,
-        [FromQuery] int pageNumber,
-        [FromQuery] int pageSize,
+        [FromQuery] string? attribute,
+        [FromQuery] string? order,
+        [FromQuery] int? pageNumber,
+        [FromQuery] int? pageSize,
         CancellationToken cancellationToken = default)
     {
         try
