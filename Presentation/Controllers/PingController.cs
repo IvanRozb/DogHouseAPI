@@ -1,3 +1,4 @@
+using Domain.Exceptions;
 using Microsoft.Extensions.Configuration;
 
 namespace Presentation.Controllers;
@@ -19,12 +20,12 @@ public class PingController : ControllerBase
 
         if (string.IsNullOrEmpty(version))
         {
-            return BadRequest("API version not configured.");
+            throw new BadRequestException("API version not configured.");
         }
 
         if (!version.StartsWith("Dogshouseservice.Version"))
         {
-            return BadRequest("Invalid API version format.");
+            throw new BadRequestException("Invalid API version format.");
         }
 
         return Ok(version);

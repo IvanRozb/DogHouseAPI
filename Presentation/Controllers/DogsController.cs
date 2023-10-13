@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 
@@ -20,15 +21,8 @@ public class DogsController : ControllerBase
         [FromQuery] int? pageSize,
         CancellationToken cancellationToken = default)
     {
-        try
-        {
-            var dogs = await _serviceManager.DogsService.GetAllAsync(attribute, order, pageNumber, pageSize, cancellationToken);
-            return Ok(dogs);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        var dogs = await _serviceManager.DogsService.GetAllAsync(attribute, order, pageNumber, pageSize, cancellationToken);
+        return Ok(dogs);
     }
     
     [HttpPost]
@@ -36,17 +30,10 @@ public class DogsController : ControllerBase
     {
         if (dog == null)
         {
-            return BadRequest("Invalid dog data");
+            throw new BadRequestException("Invalid dog data");
         }
 
-        try
-        {
-            await _serviceManager.DogsService.CreateAsync(dog, cancellationToken);
-            return CreatedAtAction("CreateDog", dog);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        await _serviceManager.DogsService.CreateAsync(dog, cancellationToken);
+        return CreatedAtAction("CreateDog", dog);
     }
 }
