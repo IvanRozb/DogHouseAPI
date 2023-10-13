@@ -6,7 +6,7 @@ using Services.Abstractions;
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("api/dogs")]
+[Route("dogs")]
 public class DogsController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;

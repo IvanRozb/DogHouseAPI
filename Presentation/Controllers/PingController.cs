@@ -5,8 +5,8 @@ namespace Presentation.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/ping")]
 [ApiController]
+[Route("ping")]
 public class PingController : ControllerBase
 {
     private readonly IConfiguration _configuration;
