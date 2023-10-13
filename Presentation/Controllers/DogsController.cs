@@ -42,7 +42,7 @@ public class DogsController : ControllerBase
         try
         {
             await _serviceManager.DogsService.CreateAsync(dog, cancellationToken);
-            return CreatedAtRoute("GetDog", new { id = dog.Id }, dog);
+            return CreatedAtAction("CreateDog", dog);
         }
         catch (Exception ex)
         {
