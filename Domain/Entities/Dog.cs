@@ -15,7 +15,6 @@ public class Dog
 
     [Required(ErrorMessage = "tail_length is required.")]
     [Range(0.01, 1000, ErrorMessage = "tail_length must be a number between 0.01 and 1000.")]
-    [JsonProperty("tail_length")] 
     public double TailLength { get; set; }
 
     [Required(ErrorMessage = "weight is required.")]

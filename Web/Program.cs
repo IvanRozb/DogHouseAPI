@@ -5,10 +5,17 @@ using Persistence.Repositories;
 using Services;
 using Services.Abstractions;
 using Web.Middleware;
+using Web.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
-    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
+    .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly)
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = 
+            SnakeCaseNamingPolicy.Instance;
+    });
+    
 
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IServiceManager, ServiceManager>();
