@@ -12,7 +12,7 @@ public sealed class RepositoryDbContext : DbContext
     {
     }
 
-    public DbSet<Dog?> Dogs { get; set; }
+    public DbSet<Dog> Dogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(RepositoryDbContext).Assembly);

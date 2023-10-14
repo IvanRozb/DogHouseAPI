@@ -32,6 +32,7 @@ namespace Web.Middleware
             httpContext.Response.StatusCode = exception switch
             {
                 BadRequestException => StatusCodes.Status400BadRequest,
+                ConflictException => StatusCodes.Status409Conflict,
                 _ => StatusCodes.Status500InternalServerError
             };
 

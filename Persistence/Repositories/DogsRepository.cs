@@ -11,14 +11,14 @@ namespace Persistence.Repositories
 
         public DogsRepository(RepositoryDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Dog?>> GetAllAsync(
+        public async Task<IEnumerable<Dog>> GetAllAsync(
             string? attribute,
             string? order,
             int? pageNumber,
             int? pageSize,
             CancellationToken cancellationToken = default)
         {
-            IQueryable<Dog?> query = _dbContext.Dogs;
+            IQueryable<Dog> query = _dbContext.Dogs;
 
             if (!string.IsNullOrWhiteSpace(attribute) && !string.IsNullOrWhiteSpace(order))
             {
@@ -33,11 +33,16 @@ namespace Persistence.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public void Insert(Dog? dog) => _dbContext.Dogs.Add(dog);
-        
-        private static IQueryable<Dog?> ApplySorting(IQueryable<Dog?> query, string attribute, string order)
+        public async Task<Dog?> GetByNameAllAsync(string name, CancellationToken cancellationToken = default)
         {
-            var attributeToPropertyMap = new Dictionary<string, Expression<Func<Dog?, object>>>
+            return await _dbContext.Dogs.FirstOrDefaultAsync(dog => dog.Name == name, cancellationToken);
+        }
+
+        public void Insert(Dog dog) => _dbContext.Dogs.Add(dog);
+        
+        private static IQueryable<Dog> ApplySorting(IQueryable<Dog> query, string attribute, string order)
+        {
+            var attributeToPropertyMap = new Dictionary<string, Expression<Func<Dog, object>>>
             {
                 { "name", dog => dog.Name },
                 { "color", dog => dog.Color },
@@ -55,7 +60,7 @@ namespace Persistence.Repositories
             return query;
         }
 
-        private static IQueryable<Dog?> ApplyPagination(IQueryable<Dog?> query, int pageNumber, int pageSize)
+        private static IQueryable<Dog> ApplyPagination(IQueryable<Dog> query, int pageNumber, int pageSize)
         {
             var itemsToSkip = (pageNumber - 1) * pageSize;
 

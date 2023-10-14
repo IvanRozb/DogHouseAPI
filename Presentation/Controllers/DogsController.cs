@@ -6,14 +6,13 @@ using Services.Abstractions;
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("dogs")]
 public class DogsController : ControllerBase
 {
     private readonly IServiceManager _serviceManager;
 
     public DogsController(IServiceManager serviceManager) => _serviceManager = serviceManager;
     
-    [HttpGet]
+    [HttpGet("dogs")]
     public async Task<IActionResult> GetDogsAsync(
         [FromQuery] string? attribute,
         [FromQuery] string? order,
@@ -53,14 +52,9 @@ public class DogsController : ControllerBase
         return Ok(dogs);
     }
     
-    [HttpPost]
+    [HttpPost("dog")]
     public async Task<IActionResult> CreateDogAsync([FromBody] Dog dog, CancellationToken cancellationToken = default)
     {
-        if (dog == null)
-        {
-            throw new BadRequestException("Invalid dog data");
-        }
-
         await _serviceManager.DogsService.CreateAsync(dog, cancellationToken);
         return CreatedAtAction("CreateDog", dog);
     }
