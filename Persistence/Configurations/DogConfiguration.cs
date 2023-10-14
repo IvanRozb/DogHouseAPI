@@ -10,9 +10,9 @@ internal sealed class DogConfiguration : IEntityTypeConfiguration<Dog>
     {
         builder.ToTable("dogs");
 
-        builder.HasKey(dog => dog.Id);
+        builder.HasKey(dog => dog.Name);
 
-        builder.Property(dog => dog.Id).ValueGeneratedOnAdd();
+        builder.Property(dog => dog.Name).ValueGeneratedOnAdd();
 
         builder.Property(dog => dog.Name).HasMaxLength(50);
         builder.Property(dog => dog.Name).IsRequired();
