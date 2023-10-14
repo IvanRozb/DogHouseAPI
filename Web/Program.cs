@@ -43,9 +43,9 @@ builder.Services.AddRateLimiter(options =>
         return RateLimitPartition.GetFixedWindowLimiter(partitionKey: httpContext.Request.Headers.Host.ToString(), _ =>
             new FixedWindowRateLimiterOptions
             {
-                PermitLimit = int.Parse(rateLimitConfiguration["PermitLimit"]),
-                AutoReplenishment = bool.Parse(rateLimitConfiguration["AutoReplenishment"]),
-                Window = TimeSpan.FromSeconds(int.Parse(rateLimitConfiguration["TimeWindow"]))
+                PermitLimit = int.Parse(rateLimitConfiguration["PermitLimit"] ?? "10"),
+                AutoReplenishment = bool.Parse(rateLimitConfiguration["AutoReplenishment"] ?? "true"),
+                Window = TimeSpan.FromSeconds(int.Parse(rateLimitConfiguration["TimeWindow"] ?? "1"))
             });
     });
     options.OnRejected = async (context, token) =>
