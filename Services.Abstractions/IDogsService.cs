@@ -10,5 +10,5 @@ public interface IDogsService
         int? pageNumber,
         int? pageSize,
         CancellationToken cancellationToken = default);
-    Task CreateAsync(Dog dog, CancellationToken cancellationToken = default);
+    public Task<Dog> CreateAsync(Dog dog, CancellationToken cancellationToken = default);
 }
