@@ -11,62 +11,12 @@ namespace Persistence.Repositories
 
         public DogsRepository(RepositoryDbContext dbContext) => _dbContext = dbContext;
 
-        public async Task<IEnumerable<Dog>> GetAllAsync(
-            string? attribute,
-            string? order,
-            int? pageNumber,
-            int? pageSize,
-            CancellationToken cancellationToken = default)
-        {
-            IQueryable<Dog> query = _dbContext.Dogs;
-
-            if (!string.IsNullOrWhiteSpace(attribute) && attribute is "name" or "color" or "tail_length" or "weight" && !string.IsNullOrWhiteSpace(order) && order is "asc" or "desc")
-            {
-                query = ApplySorting(query, attribute, order);
-            }
-
-            if (pageNumber.HasValue && pageSize.HasValue)
-            {
-                query = ApplyPagination(query, pageNumber.Value, pageSize.Value);
-            }
-
-            return await query.ToListAsync(cancellationToken);
-        }
+        public async Task<IEnumerable<Dog>> GetAllAsync(CancellationToken cancellationToken = default)
+            => await _dbContext.Dogs.ToListAsync(cancellationToken);
 
         public async Task<Dog?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
-        {
-            return await _dbContext.Dogs.FirstOrDefaultAsync(dog => dog.Name == name, cancellationToken);
-        }
+            => await _dbContext.Dogs.FirstOrDefaultAsync(dog => dog.Name == name, cancellationToken);
 
         public async Task Insert(Dog dog) => await _dbContext.Dogs.AddAsync(dog);
-        
-        private static IQueryable<Dog> ApplySorting(IQueryable<Dog> query, string attribute, string order)
-        {
-            var attributeToPropertyMap = new Dictionary<string, Expression<Func<Dog, object>>>
-            {
-                { "name", dog => dog.Name },
-                { "color", dog => dog.Color },
-                { "tail_length", dog => dog.TailLength },
-                { "weight", dog => dog.Weight }
-            };
-
-            if (attributeToPropertyMap.TryGetValue(attribute, out var propertyExpression))
-            {
-                query = order.ToLower() == "desc" ?
-                    query.OrderByDescending(propertyExpression) :
-                    query.OrderBy(propertyExpression);
-            }
-
-            return query;
-        }
-
-        private static IQueryable<Dog> ApplyPagination(IQueryable<Dog> query, int pageNumber, int pageSize)
-        {
-            var itemsToSkip = (pageNumber - 1) * pageSize;
-
-            query = query.Skip(itemsToSkip).Take(pageSize);
-
-            return query;
-        }
     }
 }

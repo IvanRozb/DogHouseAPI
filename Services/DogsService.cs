@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Repositories;
@@ -5,7 +6,7 @@ using Services.Abstractions;
 
 namespace Services;
 
-internal sealed class DogsService : IDogsService
+public class DogsService : IDogsService
 {
     private readonly IRepositoryManager _repositoryManager;
     public DogsService(IRepositoryManager repositoryManager) => _repositoryManager = repositoryManager;
@@ -27,6 +28,8 @@ internal sealed class DogsService : IDogsService
     public async Task<IEnumerable<Dog>> GetAllAsync(string? attribute, string? order, int? pageNumber, int? pageSize,
         CancellationToken cancellationToken = default)
     {
+        var query = (await _repositoryManager.DogsRepository.GetAllAsync(cancellationToken)).AsQueryable();
+        
         if (attribute is not null)
         {
             var availableAttributes = new List<string> { "name", "color", "tail_length", "weight" };
@@ -45,6 +48,11 @@ internal sealed class DogsService : IDogsService
             }
         }
         
+        if (!string.IsNullOrWhiteSpace(attribute) && !string.IsNullOrWhiteSpace(order))
+        {
+            query = ApplySorting(query, attribute, order);
+        }
+        
         if (pageNumber < 1)
         {
             throw new BadRequestException("pageNumber must be higher then 0");
@@ -55,7 +63,40 @@ internal sealed class DogsService : IDogsService
             throw new BadRequestException("pageSize must be higher then 0");
         }
 
-        return await _repositoryManager.DogsRepository.GetAllAsync(attribute, order, pageNumber, pageSize,
-            cancellationToken);
+        if (pageNumber.HasValue && pageSize.HasValue)
+        {
+            query = ApplyPagination(query, pageNumber.Value, pageSize.Value);
+        }
+
+        return query.AsEnumerable();
+    }
+    
+    private static IQueryable<Dog> ApplySorting(IQueryable<Dog> query, string attribute, string order)
+    {
+        var attributeToPropertyMap = new Dictionary<string, Expression<Func<Dog, object>>>
+        {
+            { "name", dog => dog.Name },
+            { "color", dog => dog.Color },
+            { "tail_length", dog => dog.TailLength },
+            { "weight", dog => dog.Weight }
+        };
+
+        if (attributeToPropertyMap.TryGetValue(attribute, out var propertyExpression))
+        {
+            query = order.ToLower() == "desc" ?
+                query.OrderByDescending(propertyExpression) :
+                query.OrderBy(propertyExpression);
+        }
+
+        return query;
+    }
+
+    private static IQueryable<Dog> ApplyPagination(IQueryable<Dog> query, int pageNumber, int pageSize)
+    {
+        var itemsToSkip = (pageNumber - 1) * pageSize;
+
+        query = query.Skip(itemsToSkip).Take(pageSize);
+
+        return query;
     }
 }

@@ -30,6 +30,6 @@ public class DogsController : ControllerBase
     {
         var response = await _serviceManager.DogsService.CreateAsync(dog, cancellationToken);
         
-        return CreatedAtAction("CreateDog", new { Name = response.Name}, response);
+        return CreatedAtAction("CreateDog", new { response.Name}, response);
     }
 }
