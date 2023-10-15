@@ -10,8 +10,7 @@ public class RepositoryDbContext : DbContext
     {
     }
 
-    public RepositoryDbContext(
-        DbContextOptions<RepositoryDbContext> options)
+    public RepositoryDbContext(DbContextOptions<RepositoryDbContext> options)
         : base(options)
     {
     }
@@ -20,4 +19,17 @@ public class RepositoryDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(RepositoryDbContext).Assembly);
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var relativePathToAppSettings = Path.Combine("..", "Web", "appsettings.json");
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var appSettingsPath = Path.Combine(currentDirectory, relativePathToAppSettings);
+
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile(appSettingsPath, optional: false, reloadOnChange: true)
+            .Build();
+        
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+    }
 }
