@@ -33,7 +33,7 @@ namespace Persistence.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<Dog?> GetByNameAllAsync(string name, CancellationToken cancellationToken = default)
+        public async Task<Dog?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
         {
             return await _dbContext.Dogs.FirstOrDefaultAsync(dog => dog.Name == name, cancellationToken);
         }

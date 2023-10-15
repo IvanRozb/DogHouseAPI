@@ -11,7 +11,7 @@ public interface IDogsRepository
         int? pageSize,
         CancellationToken cancellationToken = default);
     
-    public Task<Dog?> GetByNameAllAsync(string name, CancellationToken cancellationToken = default);
+    public Task<Dog?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     
     void Insert(Dog dog);
     

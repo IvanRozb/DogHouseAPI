@@ -12,7 +12,7 @@ internal sealed class DogsService : IDogsService
 
     public async Task<Dog> CreateAsync(Dog dog, CancellationToken cancellationToken = default)
     {
-        var existingDog = await _repositoryManager.DogsRepository.GetByNameAllAsync(dog.Name, cancellationToken);
+        var existingDog = await _repositoryManager.DogsRepository.GetByNameAsync(dog.Name, cancellationToken);
         if (existingDog is not null)
         {
             throw new ConflictException($"The dog with name: '{dog.Name}' is already exist!");
