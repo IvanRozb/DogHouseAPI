@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Persistence.Repositories
 {
-    internal sealed class DogsRepository : IDogsRepository
+    public class DogsRepository : IDogsRepository
     {
         private readonly RepositoryDbContext _dbContext;
 
@@ -20,7 +20,7 @@ namespace Persistence.Repositories
         {
             IQueryable<Dog> query = _dbContext.Dogs;
 
-            if (!string.IsNullOrWhiteSpace(attribute) && !string.IsNullOrWhiteSpace(order))
+            if (!string.IsNullOrWhiteSpace(attribute) && attribute is "name" or "color" or "tail_length" or "weight" && !string.IsNullOrWhiteSpace(order) && order is "asc" or "desc")
             {
                 query = ApplySorting(query, attribute, order);
             }
