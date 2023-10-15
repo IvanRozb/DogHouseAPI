@@ -21,14 +21,7 @@ builder.Services.AddControllers()
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IServiceManager, ServiceManager>();
 
-builder.Services.AddDbContextPool<RepositoryDbContext>(optionsBuilder =>
-{
-    var configuration = new ConfigurationBuilder()
-        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        .AddJsonFile("appsettings.json")
-        .Build();
-    optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddDbContext<RepositoryDbContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -65,6 +58,12 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseHttpsRedirection();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<RepositoryDbContext>();
+    dataContext.Database.Migrate();
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
