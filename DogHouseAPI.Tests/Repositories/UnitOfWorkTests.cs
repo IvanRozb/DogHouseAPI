@@ -17,7 +17,7 @@ public class UnitOfWorkTests
     }
     
     [Fact]
-    public async Task SaveChanges_SavesChangesInDbContext()
+    public async Task SaveChangesAsync_ShouldSaveChangesInUnitOfWork()
     {
         // Act
         await _unitOfWork.SaveChangesAsync();
