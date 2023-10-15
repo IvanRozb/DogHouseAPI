@@ -2,7 +2,7 @@ using Domain.Repositories;
 
 namespace Persistence.Repositories
 {
-    internal sealed class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly RepositoryDbContext _dbContext;
 
