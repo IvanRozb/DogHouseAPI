@@ -38,7 +38,7 @@ namespace Persistence.Repositories
             return await _dbContext.Dogs.FirstOrDefaultAsync(dog => dog.Name == name, cancellationToken);
         }
 
-        public void Insert(Dog dog) => _dbContext.Dogs.Add(dog);
+        public async Task Insert(Dog dog) => await _dbContext.Dogs.AddAsync(dog);
         
         private static IQueryable<Dog> ApplySorting(IQueryable<Dog> query, string attribute, string order)
         {

@@ -18,7 +18,7 @@ internal sealed class DogsService : IDogsService
             throw new ConflictException($"The dog with name: '{dog.Name}' is already exist!");
         }
         
-        _repositoryManager.DogsRepository.Insert(dog);
+        await _repositoryManager.DogsRepository.Insert(dog);
         await _repositoryManager.UnitOfWork.SaveChangesAsync(cancellationToken);
         
         return dog;

@@ -13,6 +13,6 @@ public interface IDogsRepository
     
     public Task<Dog?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
     
-    void Insert(Dog dog);
+    public Task Insert(Dog dog);
     
 }
