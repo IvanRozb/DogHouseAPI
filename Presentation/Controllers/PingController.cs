@@ -20,12 +20,12 @@ public class PingController : ControllerBase
 
         if (string.IsNullOrEmpty(version))
         {
-            throw new BadRequestException("API version not configured.");
+            return BadRequest("API version not configured.");
         }
 
         if (!version.StartsWith("Dogshouseservice.Version"))
         {
-            throw new BadRequestException("Invalid API version format.");
+            return BadRequest("Invalid API version format.");
         }
 
         return Ok(version);
