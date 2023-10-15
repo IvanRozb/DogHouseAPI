@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Presentation.Controllers;
 
-namespace DogHouseAPI.Tests.Controllers;
+namespace Tests.Controllers;
 
 public class PingControllerTests
 {

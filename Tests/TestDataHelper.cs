@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace DogHouseAPI.Tests;
+namespace Tests;
 
 public static class TestDataHelper
 {

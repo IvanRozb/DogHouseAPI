@@ -4,7 +4,7 @@ using Domain.Repositories;
 using Moq;
 using Services;
 
-namespace DogHouseAPI.Tests.Services;
+namespace Tests.Services;
 
 public class DogsServiceTests
 {
