@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Abstractions", "Services.Abstractions\Services.Abstractions.csproj", "{50CF24F7-6D4B-4739-A878-A70F2FB161B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DogHouseAPI.Tests", "DogHouseAPI.Tests\DogHouseAPI.Tests.csproj", "{521B724D-6B2D-4613-9BFB-4B6735405906}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{521B724D-6B2D-4613-9BFB-4B6735405906}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
